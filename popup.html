@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">OMD-to-BMM</h1>
+
+    <label class="label">Destination Folder:</label>
+    <div id="folder-tree" class="folder-tree"></div>
+    <div id="selected-folder" class="selected-folder">Selected: (none)</div>
+
+    <div class="create-folder-row">
+      <label for="new-folder-input" class="create-folder-label">Create folder:</label>
+      <input type="text" id="new-folder-input" class="create-folder-input" placeholder="New folder name">
+    </div>
+
+    <label for="link-input" class="label">Paste Obsidian Links:</label>
+    <textarea id="link-input" class="link-input" rows="8"
+      placeholder="- [Page Title](https://example.com)&#10;https://example.com/other"></textarea>
+    <div id="parse-preview" class="parse-preview"></div>
+
+    <button id="create-btn" class="create-btn" disabled>Create Bookmarks</button>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
