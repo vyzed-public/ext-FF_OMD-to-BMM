@@ -25,7 +25,7 @@
 #### Method 2: The Cool-Kid (or... lazy-ass, errrr. I mean: _efficient_) approach:
 ```
 Using the prompt at this URL: 
-https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/blob/main/archive/chats/prompt_archive-this-conversation.md
+https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
 
 ...and a BASENAME spec of: `archive_my-super-cool-topic`;
 
