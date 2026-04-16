@@ -8,7 +8,10 @@
 
 ### Here's [our initial '"vibe-coding" session](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/chat.vibe-code.OMD-to-BMM.session-1.md)...
 
-...which we produced with the help of the awesome (Claude-designed) prompt for Claude:
+...which we produced with the help of this awesome prompt for Claude (designed by (you guessed it) Claude himself:
+
+---
+---
 
 # Prompt: Archive This Conversation
 
