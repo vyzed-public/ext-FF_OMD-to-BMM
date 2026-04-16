@@ -1,8 +1,9 @@
 # #1: Enable: Workflow Automation to record issues into docs/issues
 
-**State:** OPEN
+**State:** CLOSED
 **Author:** vyzed
 **Created:** 2026-04-15T19:33:52Z
+**Closed:** 2026-04-16T23:57:59Z
 
 ---
 
