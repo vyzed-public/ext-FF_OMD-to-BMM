@@ -44,18 +44,3 @@ https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/bl
 ### Example Usage (at `claude.ai`):
 
 
-
----
-
-## Comments
-
-### vyzed — 2026-04-16T04:03:42Z
-
-### Example Usage (at `claude.ai`):
-
-Using the prompt at this URL: 
-https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
-
-...and a BASENAME spec of: `what-i-want_this-sukka_to-be-named`;
-
-...please archive this conversation per the spec in the prompt.
