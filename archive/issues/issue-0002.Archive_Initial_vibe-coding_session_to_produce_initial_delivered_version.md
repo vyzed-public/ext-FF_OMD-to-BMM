@@ -41,4 +41,3 @@ https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/bl
   what you don't need with a markdown editor afterward.
 
 
-
