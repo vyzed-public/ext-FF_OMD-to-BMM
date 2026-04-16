@@ -33,7 +33,7 @@ https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/bl
 ```
 ---
 
-### Level-Ups"
+### _"Level-Ups"_
 - **Archive before forking.** If you're about to edit an earlier message to
   create a branch, drop this prompt first — once you fork, the current
   branch's images and context may become inaccessible.
