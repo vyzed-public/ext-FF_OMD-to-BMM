@@ -133,6 +133,6 @@ ${BASENAME}.zip
 Using the prompt at this URL: 
 https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
 
-...and a BASENAME spec of: archive_issues-and-comments_in-repo;
+...and a BASENAME spec of: `what-i-want_this-sukka_to-be-named`;
 
 ...please archive this conversation per the spec in the prompt.
