@@ -6,7 +6,7 @@
 
 ---
 
-Per this part of our vibe coding session:
+Per this part of [our initial vibe coding session](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/chat.vibe-code.OMD-to-BMM.session-1.md)...
 
 ### User
 
