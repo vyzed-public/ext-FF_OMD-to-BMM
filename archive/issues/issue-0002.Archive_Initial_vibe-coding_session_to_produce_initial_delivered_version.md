@@ -1,4 +1,4 @@
-# #2: Code Review: on initial delivered version
+# #2: Archive: Initial "vibe-coding" session (to produce initial delivered version)
 
 **State:** OPEN
 **Author:** vyzed
