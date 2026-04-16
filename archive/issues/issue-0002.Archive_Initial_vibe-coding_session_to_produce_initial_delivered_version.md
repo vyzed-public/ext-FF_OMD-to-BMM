@@ -10,7 +10,6 @@
 
 ...which we produced with the help of the awesome (Claude-designed) prompt for Claude:
 
-```
 # Prompt: Archive This Conversation
 
 ## Configuration (for the human)
@@ -112,5 +111,4 @@ ${BASENAME}.zip
 - **Archive early, curate later.** Capture everything faithfully now; trim
   what you don't need with a markdown editor afterward.
 
-```
 
