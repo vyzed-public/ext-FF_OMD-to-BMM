@@ -11,6 +11,21 @@
 ...which we produced with the help of this awesome prompt for Claude (designed by (you guessed it) Claude himself:
 
 ---
+
+### Usage Notes (for the user)
+
+- **To invoke:** Edit the `BASENAME` in this file, upload it, and prompt:
+  *"Please archive this conversation per the attached spec."*
+- Place this prompt at or near the **end** of the conversation you want
+  to archive.
+- **Archive before forking.** If you're about to edit an earlier message to
+  create a branch, drop this prompt first — once you fork, the current
+  branch's images and context may become inaccessible.
+- **Archive early, curate later.** Capture everything faithfully now; trim
+  what you don't need with a markdown editor afterward.
+
+---
+
 ---
 
 # Prompt: Archive This Conversation
@@ -101,17 +116,5 @@ ${BASENAME}.zip
 - If any uploaded files are NOT images (e.g., `.md`, `.zip`, `.txt`), exclude
   them from the images directory — only include actual image files
   (`.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`).
-
-## Usage Notes (for the user)
-
-- **To invoke:** Edit the `BASENAME` in this file, upload it, and prompt:
-  *"Please archive this conversation per the attached spec."*
-- Place this prompt at or near the **end** of the conversation you want
-  to archive.
-- **Archive before forking.** If you're about to edit an earlier message to
-  create a branch, drop this prompt first — once you fork, the current
-  branch's images and context may become inaccessible.
-- **Archive early, curate later.** Capture everything faithfully now; trim
-  what you don't need with a markdown editor afterward.
 
 
