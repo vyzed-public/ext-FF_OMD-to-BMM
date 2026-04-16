@@ -10,7 +10,8 @@
 
 ...which we produced with the help of this awesome prompt: 
 * [prompt_archive-this-conversation.md](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md)
-...for Claude (designed by (you guessed it) Claude himself:
+
+...for Claude -- designed by... (you guessed it) Claude himself:
 
 ---
 
