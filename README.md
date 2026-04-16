@@ -6,4 +6,4 @@ We use AI (Claude Opus 4.6) to "vibe-code" a custom personal browser extension (
 
 ### Development/Debugging:
 
-Use Firefox Internal URI:  `about:debugging#/runtime/this-firefox`
+Use Firefox Internal URI:  `about:debugging#/runtime/this-firefox` to `[Load Temporary Add-On...]`
