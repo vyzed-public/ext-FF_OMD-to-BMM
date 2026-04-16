@@ -1,10 +1,10 @@
-# Prompt: Archive This Conversation
+# Prompt: Archive This Amazing Conversation
 
-## Configuration (for the human)
+## Configuration (for your human)
 
-Replace `chat.CHANGEME` with your desired base name. This drives all output paths:
+Your human will replace `chat.CHANGEME` with their desired base name. This drives all output paths:
 
-## Configuration (for the AI model)
+## Configuration (for you, the amazing AI model)
 
 ```
 BASENAME = chat.CHANGEME
@@ -80,10 +80,9 @@ ${BASENAME}.zip
 
 ---
 
-## Processing Rules (for Claude)
+## Processing Rules (for you, the AI)
 
 - Do NOT include this archival prompt and its response in the archived output.
 - If any uploaded files are NOT images (e.g., `.md`, `.zip`, `.txt`), exclude
   them from the images directory — only include actual image files
   (`.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`).
-
