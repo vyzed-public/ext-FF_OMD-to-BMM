@@ -131,7 +131,7 @@ ${BASENAME}.zip
 ### Example Usage (at `claude.ai`):
 
 Using the prompt at this URL: 
-https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
+* https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
 
 ...and a BASENAME spec of: archive_issues-and-comments_in-repo;
 
