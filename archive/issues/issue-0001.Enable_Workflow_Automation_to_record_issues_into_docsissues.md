@@ -21,6 +21,6 @@
 
 > GitHub's web editor will automatically create the nested directories as you type the slashes. Paste in the workflow content, commit, and you're done. GitHub Actions picks it up automatically from that specific path — there's no separate "enable" step.
 
-#### Resuls:
+#### Results:
 
 Behold the marvel and glory of AI-rendered advice in our shiny new: [sync-issues.yml](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/.github/workflows/sync-issues.yml)
