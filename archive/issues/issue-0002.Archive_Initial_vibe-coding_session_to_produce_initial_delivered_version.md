@@ -125,3 +125,14 @@ ${BASENAME}.zip
   (`.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.svg`).
 
 
+
+### vyzed — 2026-04-16T04:03:42Z
+
+### Example Usage (at claude.ai):
+
+Using the prompt at this URL: 
+https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
+
+...and a BASENAME spec of: archive_issues-and-comments_in-repo;
+
+...please archive this conversation per the spec in the prompt.
