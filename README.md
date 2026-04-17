@@ -6,7 +6,7 @@ We use AI (Claude Opus 4.6) to "vibe-code" a custom personal browser extension (
 
 ## How Tos
 
-Useful SOPs can be pulled straight off the (now) [Closed Issues List](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/issues?q=is%3Aissue%20state%3Aclosed)
+Useful SOPs can be pulled straight off the (now) [Closed Issues List](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/issues?q=is%3Aissue%20state%3Aclosed%20sort%3Acreated-asc)
 
 ---
 
