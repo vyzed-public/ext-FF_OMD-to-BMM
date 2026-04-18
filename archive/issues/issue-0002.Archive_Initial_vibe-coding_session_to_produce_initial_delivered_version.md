@@ -7,7 +7,7 @@
 
 ---
 
-### Here's [our initial '"vibe-coding" session](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/chat.vibe-code.OMD-to-BMM.session-1.md)...
+### Here's our initial '"vibe-coding" session: [Obsidian to Firefox Bookmark Manager — Session 1](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/chat.vibe-code.OMD-to-BMM.session-1.md)...
 
 ...which we produced with the help of this awesome prompt: 
 * [prompt_archive-this-conversation.md](https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/blob/main/archive/chats/prompt_archive-this-conversation.md)
