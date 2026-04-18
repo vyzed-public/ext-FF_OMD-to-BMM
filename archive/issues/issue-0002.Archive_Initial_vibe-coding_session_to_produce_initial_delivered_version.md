@@ -9,37 +9,7 @@
 
 ### Here's our initial '"vibe-coding" session: [Obsidian to Firefox Bookmark Manager — Session 1](https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/chat.vibe-code.OMD-to-BMM.session-1.md)...
 
-...which we produced with the help of this awesome prompt: 
-* [prompt_archive-this-conversation.md](https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/blob/main/archive/chats/prompt_archive-this-conversation.md)
-
-...for Claude -- designed by... (you guessed it) Claude himself:
-
----
-
-### Usage Notes
-
-#### Method 1 (old-school) direct file upload:
-- **To invoke:** Edit the `BASENAME` in the prompt file, upload it, and prompt:
-  *"Please archive this conversation per the attached spec."*
-- Place this prompt at or near the **end** of the conversation you want to archive.
-
-#### Method 2: The Cool-Kid (or... lazy-ass, errrr. I mean: _efficient_) approach:
-```
-Using the prompt at this URL: 
-https://github.com/vyzed-public/ext-FF_OMD-to-BMM/blob/main/archive/chats/prompt_archive-this-conversation.md
-
-...and a BASENAME spec of: `archive_my-super-cool-topic`;
-
-...please archive this conversation per the spec in the prompt.
-```
----
-
-### _"Level-Ups"_
-- **Archive before forking.** If you're about to edit an earlier message to
-  create a branch, drop this prompt first — once you fork, the current
-  branch's images and context may become inaccessible.
-- **Archive early, curate later.** Capture everything faithfully now; trim
-  what you don't need with a markdown editor afterward.
+...which we produced with the help of **[this awesome prompt](https://github.com/vyzed-public/optimize_GitHub_with-archived_issues-comments/issues/2#issue-4279079222)**.
 
 
 
