@@ -17,12 +17,12 @@
       "48": "icons/icon-48.png",
       "96": "icons/icon-96.png"
     },
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_title": "OMD-to-BMM: Import bookmarks from Obsidian"
   },
   "sidebar_action": {
     "default_title": "OMD-to-BMM Bookmarks",
-    "default_panel": "sidebar.html",
+    "default_panel": "sidebar/sidebar.html",
     "default_icon": {
       "48": "icons/icon-48.png",
       "96": "icons/icon-96.png"
