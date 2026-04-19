@@ -1,15 +1,19 @@
 {
   "manifest_version": 2,
-  "name": "OMD-to-BMM",
-  "version": "0.3.0",
-  "description": "Import Obsidian markdown links and plain URLs as Firefox bookmarks.",
+  "name": "BMM-to-OMD Paste",
+  "version": "1.0.0",
+  "description": "Copy bookmark folder contents as Obsidian-style Markdown, ready to paste.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "omd2bmm@vyzed.net"
+      "id": "bmm2omd@vyzed.net",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   },
   "permissions": [
     "bookmarks",
+    "clipboardWrite",
     "storage"
   ],
   "browser_action": {
@@ -17,16 +21,8 @@
       "48": "icons/icon-48.png",
       "96": "icons/icon-96.png"
     },
-    "default_popup": "popup.html",
-    "default_title": "OMD-to-BMM: Import bookmarks from Obsidian"
-  },
-  "sidebar_action": {
-    "default_title": "OMD-to-BMM Bookmarks",
-    "default_panel": "sidebar.html",
-    "default_icon": {
-      "48": "icons/icon-48.png",
-      "96": "icons/icon-96.png"
-    }
+    "default_popup": "popup/popup.html",
+    "default_title": "BMM-to-OMD: Copy bookmarks as Markdown"
   },
   "icons": {
     "48": "icons/icon-48.png",
