@@ -158,6 +158,13 @@
   const BULLET_PREFIX_RE = /^[\s\-\*\+]*/;
   const NUMBERED_PREFIX_RE = /^\s*\d+\.\s*/;
 
+  /* Separator pattern: matches the convention from ext-FF_BMM-to-OMD-paste.
+   * U+2500 (BOX DRAWINGS LIGHT HORIZONTAL) × 3 or more on each side,
+   * with the word "separator" in between (flexible whitespace).
+   * This enables round-trip: BMM → OMD → BMM preserves separators.
+   * See: ext-FF_BMM-to-OMD-paste/docs/spec.v02a.extension.bmm2omd.md §7.4 */
+  const SEPARATOR_RE = /^─{3,}\s+separator\s+─{3,}$/;
+
   function stripPrefix(line) {
     // Strip numbered list prefix first, then bullet prefixes
     let stripped = line.replace(NUMBERED_PREFIX_RE, "");
@@ -175,16 +182,22 @@
       const line = stripPrefix(rawLine);
       if (!line) return;
 
-      // Try markdown link first
+      // Check for separator pattern first
+      if (SEPARATOR_RE.test(line)) {
+        results.push({ type: "separator" });
+        return;
+      }
+
+      // Try markdown link
       const match = line.match(MD_LINK_RE);
       if (match) {
-        results.push({ title: match[1], url: match[2] });
+        results.push({ type: "bookmark", title: match[1], url: match[2] });
         return;
       }
 
       // Try plain URL
       if (/^https?:\/\//.test(line)) {
-        results.push({ title: line, url: line });
+        results.push({ type: "bookmark", title: line, url: line });
       }
     });
 
@@ -192,16 +205,25 @@
   }
 
   function updateParsePreview() {
-    const links = parseLinks(linkInput.value);
+    const items = parseLinks(linkInput.value);
+    const links = items.filter(function (i) { return i.type === "bookmark"; });
+    const separators = items.filter(function (i) { return i.type === "separator"; });
+
     if (linkInput.value.trim() === "") {
       parsePreview.textContent = "";
       parsePreview.className = "parse-preview";
-    } else if (links.length === 0) {
+    } else if (items.length === 0) {
       parsePreview.textContent = "No valid links detected.";
       parsePreview.className = "parse-preview no-links";
     } else {
-      const noun = links.length === 1 ? "link" : "links";
-      parsePreview.textContent = links.length + " " + noun + " detected.";
+      var parts = [];
+      if (links.length > 0) {
+        parts.push(links.length + (links.length === 1 ? " link" : " links"));
+      }
+      if (separators.length > 0) {
+        parts.push(separators.length + (separators.length === 1 ? " separator" : " separators"));
+      }
+      parsePreview.textContent = parts.join(", ") + " detected.";
       parsePreview.className = "parse-preview has-links";
     }
     updateCreateButton();
@@ -252,19 +274,30 @@
 
     for (const link of links) {
       try {
-        await browser.bookmarks.create({
-          parentId: targetFolderId,
-          title: link.title,
-          url: link.url
-        });
+        if (link.type === "separator") {
+          /* Round-trip separator support: create a Firefox bookmark
+           * separator from the OMD separator designator.
+           * See: ext-FF_BMM-to-OMD-paste/docs/spec.v02a §7.4 */
+          await browser.bookmarks.create({
+            type: "separator",
+            parentId: targetFolderId
+          });
+        } else {
+          await browser.bookmarks.create({
+            parentId: targetFolderId,
+            title: link.title,
+            url: link.url
+          });
+        }
         created++;
       } catch (err) {
-        errors.push(link.title + ": " + err.message);
+        var errLabel = link.type === "separator" ? "separator" : link.title;
+        errors.push(errLabel + ": " + err.message);
       }
     }
 
     if (errors.length === 0) {
-      const noun = created === 1 ? "bookmark" : "bookmarks";
+      const noun = created === 1 ? "item" : "items";
       statusArea.innerHTML =
         "Created " + created + " " + noun + " in folder <strong>" +
         escapeHtml(targetFolderName) + "</strong>.<br>" +
