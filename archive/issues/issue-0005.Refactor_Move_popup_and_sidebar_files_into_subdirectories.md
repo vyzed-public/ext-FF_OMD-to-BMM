@@ -6,7 +6,7 @@
 
 ---
 
-Currently, all the JS files live flat in the repo root. This clutters the top level and is inconsistent with the convention established in the sibling projects (ext-FF_BMM-to-OMD-paste and ext-FF_Tab-to-OMD-paste), which organize UI files into a `popup/` subdirectory.
+Currently, all the JS files live flat in the repo root. This clutters the top level and is inconsistent with the convention established in the sibling projects ([ext-FF_BMM-to-OMD-paste](https://github.com/vyzed-public/ext-FF_BMM-to-OMD-paste) and [ext-FF_Tab-to-OMD-paste](https://github.com/vyzed-public/ext-FF_Tab-to-OMD-paste)), which organize UI files into a `popup/` subdirectory.
 
 So we'll implement:
 ```
