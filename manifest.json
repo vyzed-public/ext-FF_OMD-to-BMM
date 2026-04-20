@@ -5,7 +5,10 @@
   "description": "Import Obsidian markdown links and plain URLs as Firefox bookmarks.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "omd2bmm@vyzed.net"
+      "id": "omd2bmm@vyzed.net",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   },
   "permissions": [
