@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "OMD-to-BMM",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Import Obsidian markdown links and plain URLs as Firefox bookmarks.",
   "browser_specific_settings": {
     "gecko": {
