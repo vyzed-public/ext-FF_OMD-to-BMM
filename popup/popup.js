@@ -152,11 +152,19 @@
     // Nothing in the chain survived — fall back to no selection
   }
 
-  // ── Link parsing ─────────────────────────────────────────────
+  // ── Input parsing (hierarchical) ──────────────────────────────
+  //
+  // Parses indented bulleted markdown into a tree structure.
+  // Supports:
+  //   - [Title](url)              → bookmark
+  //   - ─────  separator  ─────   → separator (round-trip convention)
+  //   - Plain text bullet         → folder (children are indented beneath)
+  //   - Plain URL                 → bookmark (title = URL)
+  //   - Flat lists (no indent)    → all items at root level (backwards compatible)
+  //
+  // Indentation: 4 spaces or 1 tab per level.
 
   const MD_LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/;
-  const BULLET_PREFIX_RE = /^[\s\-\*\+]*/;
-  const NUMBERED_PREFIX_RE = /^\s*\d+\.\s*/;
 
   /* Separator pattern: matches the convention from ext-FF_BMM-to-OMD-paste.
    * U+2500 (BOX DRAWINGS LIGHT HORIZONTAL) × 3 or more on each side,
@@ -165,63 +173,149 @@
    * See: ext-FF_BMM-to-OMD-paste/docs/spec.v02a.extension.bmm2omd.md §7.4 */
   const SEPARATOR_RE = /^─{3,}\s+separator\s+─{3,}$/;
 
-  function stripPrefix(line) {
-    // Strip numbered list prefix first, then bullet prefixes
-    let stripped = line.replace(NUMBERED_PREFIX_RE, "");
-    if (stripped === line) {
-      stripped = line.replace(BULLET_PREFIX_RE, "");
+  /**
+   * Measure the indentation level of a raw line.
+   * 1 tab = 1 level, 4 spaces = 1 level, 2 spaces = 1 level (flexible).
+   * Returns { level: number, content: string (stripped of indent and bullet) }
+   */
+  function parseLine(rawLine) {
+    if (!rawLine.trim()) return null;
+
+    // Count leading whitespace to determine indent level
+    var leadingMatch = rawLine.match(/^(\s*)/);
+    var leading = leadingMatch ? leadingMatch[1] : "";
+    var spaces = 0;
+    for (var i = 0; i < leading.length; i++) {
+      if (leading[i] === "\t") {
+        spaces += 4;
+      } else {
+        spaces += 1;
+      }
     }
-    return stripped.trim();
+
+    // Determine indent unit: try 4-space first, fall back to 2-space
+    var level = Math.floor(spaces / 4);
+    if (level === 0 && spaces >= 2) {
+      level = Math.floor(spaces / 2);
+    }
+
+    // Strip bullet prefix (-, *, +) or numbered prefix (1., 2., etc.)
+    var rest = rawLine.trim();
+    var numberedMatch = rest.match(/^\d+\.\s+(.*)/);
+    if (numberedMatch) {
+      rest = numberedMatch[1];
+    } else {
+      var bulletMatch = rest.match(/^[-*+]\s+(.*)/);
+      if (bulletMatch) {
+        rest = bulletMatch[1];
+      }
+    }
+
+    rest = rest.trim();
+    if (!rest) return null;
+
+    // Classify the content
+    if (SEPARATOR_RE.test(rest)) {
+      return { level: level, type: "separator" };
+    }
+
+    var linkMatch = rest.match(MD_LINK_RE);
+    if (linkMatch) {
+      return { level: level, type: "bookmark", title: linkMatch[1], url: linkMatch[2] };
+    }
+
+    if (/^https?:\/\//.test(rest)) {
+      return { level: level, type: "bookmark", title: rest, url: rest };
+    }
+
+    // Plain text = folder name
+    return { level: level, type: "folder", title: rest, children: [] };
   }
 
-  function parseLinks(text) {
-    const lines = text.split("\n");
-    const results = [];
+  /**
+   * Parse pasted text into a tree of nodes.
+   * Each node: { type, title?, url?, children? }
+   * Folders have children arrays; bookmarks and separators are leaves.
+   *
+   * The algorithm uses a stack to track the current parent at each depth.
+   * When indentation increases, the most recent folder becomes the parent.
+   * When indentation decreases, we pop back up the stack.
+   */
+  function parseInput(text) {
+    var lines = text.split("\n");
+    var root = { type: "root", children: [] };
 
-    lines.forEach(function (rawLine) {
-      const line = stripPrefix(rawLine);
-      if (!line) return;
+    // Stack: array of { node, level }
+    // stack[0] is always root at level -1
+    var stack = [{ node: root, level: -1 }];
 
-      // Check for separator pattern first
-      if (SEPARATOR_RE.test(line)) {
-        results.push({ type: "separator" });
-        return;
+    for (var i = 0; i < lines.length; i++) {
+      var parsed = parseLine(lines[i]);
+      if (!parsed) continue;
+
+      // Pop stack back to the appropriate parent level
+      while (stack.length > 1 && stack[stack.length - 1].level >= parsed.level) {
+        stack.pop();
       }
 
-      // Try markdown link
-      const match = line.match(MD_LINK_RE);
-      if (match) {
-        results.push({ type: "bookmark", title: match[1], url: match[2] });
-        return;
-      }
+      var parent = stack[stack.length - 1].node;
 
-      // Try plain URL
-      if (/^https?:\/\//.test(line)) {
-        results.push({ type: "bookmark", title: line, url: line });
-      }
-    });
+      // Ensure parent has a children array
+      if (!parent.children) parent.children = [];
+      parent.children.push(parsed);
 
-    return results;
+      // If this is a folder, push it onto the stack as potential parent
+      if (parsed.type === "folder") {
+        stack.push({ node: parsed, level: parsed.level });
+      }
+    }
+
+    return root.children;
+  }
+
+  /**
+   * Count all items in a parsed tree (recursive).
+   * Returns { bookmarks, separators, folders }
+   */
+  function countParsedItems(nodes) {
+    var counts = { bookmarks: 0, separators: 0, folders: 0 };
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      if (node.type === "bookmark") counts.bookmarks++;
+      else if (node.type === "separator") counts.separators++;
+      else if (node.type === "folder") {
+        counts.folders++;
+        if (node.children && node.children.length > 0) {
+          var sub = countParsedItems(node.children);
+          counts.bookmarks += sub.bookmarks;
+          counts.separators += sub.separators;
+          counts.folders += sub.folders;
+        }
+      }
+    }
+    return counts;
   }
 
   function updateParsePreview() {
-    const items = parseLinks(linkInput.value);
-    const links = items.filter(function (i) { return i.type === "bookmark"; });
-    const separators = items.filter(function (i) { return i.type === "separator"; });
+    var items = parseInput(linkInput.value);
 
     if (linkInput.value.trim() === "") {
       parsePreview.textContent = "";
       parsePreview.className = "parse-preview";
     } else if (items.length === 0) {
-      parsePreview.textContent = "No valid links detected.";
+      parsePreview.textContent = "No valid items detected.";
       parsePreview.className = "parse-preview no-links";
     } else {
+      var counts = countParsedItems(items);
       var parts = [];
-      if (links.length > 0) {
-        parts.push(links.length + (links.length === 1 ? " link" : " links"));
+      if (counts.bookmarks > 0) {
+        parts.push(counts.bookmarks + (counts.bookmarks === 1 ? " link" : " links"));
       }
-      if (separators.length > 0) {
-        parts.push(separators.length + (separators.length === 1 ? " separator" : " separators"));
+      if (counts.folders > 0) {
+        parts.push(counts.folders + (counts.folders === 1 ? " folder" : " folders"));
+      }
+      if (counts.separators > 0) {
+        parts.push(counts.separators + (counts.separators === 1 ? " separator" : " separators"));
       }
       parsePreview.textContent = parts.join(", ") + " detected.";
       parsePreview.className = "parse-preview has-links";
@@ -234,15 +328,69 @@
   // ── Create button state ──────────────────────────────────────
 
   function updateCreateButton() {
-    const links = parseLinks(linkInput.value);
-    createBtn.disabled = !(selectedFolderId && links.length > 0);
+    const items = parseInput(linkInput.value);
+    createBtn.disabled = !(selectedFolderId && items.length > 0);
   }
 
-  // ── Bookmark creation ────────────────────────────────────────
+  // ── Bookmark creation (recursive) ─────────────────────────────
+
+  /**
+   * Recursively create bookmarks, folders, and separators from a parsed tree.
+   * @param {Array} nodes - parsed items from parseInput()
+   * @param {string} parentId - Firefox bookmark folder ID to create items in
+   * @returns {Promise<{created: number, errors: string[]}>}
+   */
+  async function createBookmarkTree(nodes, parentId) {
+    var created = 0;
+    var errors = [];
+
+    for (var i = 0; i < nodes.length; i++) {
+      var node = nodes[i];
+      try {
+        if (node.type === "separator") {
+          /* Round-trip separator support: create a Firefox bookmark
+           * separator from the OMD separator designator.
+           * See: ext-FF_BMM-to-OMD-paste/docs/spec.v02a §7.4 */
+          await browser.bookmarks.create({
+            type: "separator",
+            parentId: parentId
+          });
+          created++;
+        } else if (node.type === "folder") {
+          /* Create the folder, then recurse into its children */
+          var newFolder = await browser.bookmarks.create({
+            parentId: parentId,
+            title: node.title
+          });
+          created++;
+          if (node.children && node.children.length > 0) {
+            var sub = await createBookmarkTree(node.children, newFolder.id);
+            created += sub.created;
+            errors = errors.concat(sub.errors);
+          }
+        } else {
+          /* Bookmark */
+          await browser.bookmarks.create({
+            parentId: parentId,
+            title: node.title,
+            url: node.url
+          });
+          created++;
+        }
+      } catch (err) {
+        var errLabel = node.type === "separator" ? "separator" :
+                       node.type === "folder" ? "folder: " + node.title :
+                       node.title;
+        errors.push(errLabel + ": " + err.message);
+      }
+    }
+
+    return { created: created, errors: errors };
+  }
 
   createBtn.addEventListener("click", async function () {
-    const links = parseLinks(linkInput.value);
-    if (!selectedFolderId || links.length === 0) return;
+    const items = parseInput(linkInput.value);
+    if (!selectedFolderId || items.length === 0) return;
 
     createBtn.disabled = true;
     statusArea.textContent = "Creating bookmarks...";
@@ -269,37 +417,12 @@
       }
     }
 
-    let created = 0;
-    let errors = [];
+    var result = await createBookmarkTree(items, targetFolderId);
 
-    for (const link of links) {
-      try {
-        if (link.type === "separator") {
-          /* Round-trip separator support: create a Firefox bookmark
-           * separator from the OMD separator designator.
-           * See: ext-FF_BMM-to-OMD-paste/docs/spec.v02a §7.4 */
-          await browser.bookmarks.create({
-            type: "separator",
-            parentId: targetFolderId
-          });
-        } else {
-          await browser.bookmarks.create({
-            parentId: targetFolderId,
-            title: link.title,
-            url: link.url
-          });
-        }
-        created++;
-      } catch (err) {
-        var errLabel = link.type === "separator" ? "separator" : link.title;
-        errors.push(errLabel + ": " + err.message);
-      }
-    }
-
-    if (errors.length === 0) {
-      const noun = created === 1 ? "item" : "items";
+    if (result.errors.length === 0) {
+      const noun = result.created === 1 ? "item" : "items";
       statusArea.innerHTML =
-        "Created " + created + " " + noun + " in folder <strong>" +
+        "Created " + result.created + " " + noun + " in folder <strong>" +
         escapeHtml(targetFolderName) + "</strong>.<br>" +
         '<a id="open-sidebar" href="#">View in sidebar</a> · ' +
         'Open Bookmark Manager: <strong>Ctrl+Shift+O</strong><br>' +
@@ -328,8 +451,8 @@
       });
     } else {
       statusArea.innerHTML =
-        "Created " + created + ", failed " + errors.length + ".<br>" +
-        escapeHtml(errors.join("; "));
+        "Created " + result.created + ", failed " + result.errors.length + ".<br>" +
+        escapeHtml(result.errors.join("; "));
       statusArea.className = "status error";
     }
 
