@@ -22,6 +22,7 @@ It is now available at https://addons.mozilla.org/developers/addon/3003369/versi
 Since this was a personal submission, login may be required.  
 
 If so, then use your own development version and submit your own personal extension.
+
 Helpful Guidance: [guidance.AMO-submissions.errors-and-arcana.md](https://github.com/vyzed-public/ext-FF_BMM-to-OMD-paste/blob/main/docs/guidance.AMO-submissions.errors-and-arcana.md)
 
 
