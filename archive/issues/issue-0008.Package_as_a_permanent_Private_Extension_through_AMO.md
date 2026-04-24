@@ -11,7 +11,7 @@ Package and sign this extension through AMO as an unlisted private extension for
 ### Related:
 
 #### Prior art:
-* Project: [ext-FF_BMM-to-OMD-paste](https://github.com/vyzed-public/ext-FF_BMM-to-OMD-paste))
+* Project: [ext-FF_BMM-to-OMD-paste](https://github.com/vyzed-public/ext-FF_BMM-to-OMD-paste)
   * **issue: [Package as a permanent Private Extension through AMO](https://github.com/vyzed-public/ext-FF_BMM-to-OMD-paste/issues/2)**
 #### Guidance doc (markdown, not a dumb-ass MS doc): 
 * **[AMO Submissions: Errors, Gotchas, and Arcana](https://github.com/vyzed-public/ext-FF_BMM-to-OMD-paste/blob/main/docs/guidance.AMO-submissions.errors-and-arcana.md)**
