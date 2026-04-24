@@ -12,6 +12,7 @@
   const linkInput = document.getElementById("link-input");
   const parsePreview = document.getElementById("parse-preview");
   const createBtn = document.getElementById("create-btn");
+  const dismissBtn = document.getElementById("dismiss-btn");
   const statusArea = document.getElementById("status");
 
   let selectedFolderId = null;
@@ -157,12 +158,14 @@
   // Parses indented bulleted markdown into a tree structure.
   // Supports:
   //   - [Title](url)              → bookmark
+  //   — [Title](url)              → bookmark (em-dash U+2014, canonical round-trip format)
   //   - ─────  separator  ─────   → separator (round-trip convention)
   //   - Plain text bullet         → folder (children are indented beneath)
   //   - Plain URL                 → bookmark (title = URL)
   //   - Flat lists (no indent)    → all items at root level (backwards compatible)
   //
-  // Indentation: 4 spaces or 1 tab per level.
+  // Indentation: 2 spaces or 1 tab per level (tab = 2 spaces).
+  // Em-dash lines are always bookmarks regardless of what follows them.
 
   const MD_LINK_RE = /\[([^\]]+)\]\(([^)]+)\)/;
 
@@ -175,7 +178,7 @@
 
   /**
    * Measure the indentation level of a raw line.
-   * 1 tab = 1 level, 4 spaces = 1 level, 2 spaces = 1 level (flexible).
+   * 1 tab = 2 spaces = 1 level. 2 spaces = 1 level.
    * Returns { level: number, content: string (stripped of indent and bullet) }
    */
   function parseLine(rawLine) {
@@ -187,17 +190,17 @@
     var spaces = 0;
     for (var i = 0; i < leading.length; i++) {
       if (leading[i] === "\t") {
-        spaces += 4;
+        /* Treat tab as 2 spaces — matches Obsidian's tab-indented list
+         * convention where continuation lines use tab + 2 spaces,
+         * giving a clean 2-space-per-level indent unit throughout. */
+        spaces += 2;
       } else {
         spaces += 1;
       }
     }
 
-    // Determine indent unit: try 4-space first, fall back to 2-space
-    var level = Math.floor(spaces / 4);
-    if (level === 0 && spaces >= 2) {
-      level = Math.floor(spaces / 2);
-    }
+    // 2 spaces = 1 indent level
+    var level = Math.floor(spaces / 2);
 
     // Strip bullet prefix (-, *, +) or numbered prefix (1., 2., etc.)
     var rest = rawLine.trim();
@@ -213,6 +216,24 @@
 
     rest = rest.trim();
     if (!rest) return null;
+
+    // Em-dash prefix (U+2014): canonical bookmark attribution line from
+    // Tab-to-OMD and BMM-to-OMD round-trip format. Strip the em-dash and
+    // classify the remainder as a bookmark directly — do not fall through
+    // to folder detection.
+    var emDashMatch = rest.match(/^\u2014\s+(.*)/);
+    if (emDashMatch) {
+      rest = emDashMatch[1].trim();
+      var emLinkMatch = rest.match(MD_LINK_RE);
+      if (emLinkMatch) {
+        return { level: level, type: "bookmark", title: emLinkMatch[1], url: emLinkMatch[2] };
+      }
+      if (/^https?:\/\//.test(rest)) {
+        return { level: level, type: "bookmark", title: rest, url: rest };
+      }
+      // Em-dash with non-link content — ignore
+      return null;
+    }
 
     // Classify the content
     if (SEPARATOR_RE.test(rest)) {
@@ -435,6 +456,13 @@
       // Clear the new folder input after successful creation
       newFolderInput.value = "";
 
+      // Swap Create button for Dismiss button to prevent double-submission
+      createBtn.style.display = "none";
+      dismissBtn.style.display = "";
+      dismissBtn.addEventListener("click", function () {
+        window.close();
+      });
+
       document.getElementById("open-sidebar").addEventListener("click", function (e) {
         e.preventDefault();
         browser.sidebarAction.open();
@@ -454,6 +482,7 @@
         "Created " + result.created + ", failed " + result.errors.length + ".<br>" +
         escapeHtml(result.errors.join("; "));
       statusArea.className = "status error";
+      createBtn.disabled = false;
     }
 
     updateCreateButton();
