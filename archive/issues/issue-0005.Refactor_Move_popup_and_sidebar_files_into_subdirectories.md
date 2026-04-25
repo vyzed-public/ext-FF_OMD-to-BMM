@@ -1,8 +1,9 @@
 # #5: Refactor: Move popup and sidebar files into subdirectories
 
-**State:** OPEN
+**State:** CLOSED
 **Author:** vyzed
 **Created:** 2026-04-19T22:39:45Z
+**Closed:** 2026-04-25T05:36:57Z
 
 ---
 
