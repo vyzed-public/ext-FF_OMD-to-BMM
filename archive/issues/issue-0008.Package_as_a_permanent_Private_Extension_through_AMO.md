@@ -1,8 +1,9 @@
 # #8: Package: as a permanent Private Extension through AMO
 
-**State:** OPEN
+**State:** CLOSED
 **Author:** vyzed
 **Created:** 2026-04-20T00:44:27Z
+**Closed:** 2026-04-25T05:37:56Z
 
 ---
 
