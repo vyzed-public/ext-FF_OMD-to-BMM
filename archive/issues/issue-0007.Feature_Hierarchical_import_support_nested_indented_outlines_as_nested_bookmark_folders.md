@@ -1,8 +1,9 @@
 # #7: Feature: Hierarchical import — support nested indented outlines as nested bookmark folders
 
-**State:** OPEN
+**State:** CLOSED
 **Author:** vyzed
 **Created:** 2026-04-19T23:43:15Z
+**Closed:** 2026-04-25T05:37:30Z
 
 ---
 
