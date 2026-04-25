@@ -1,8 +1,9 @@
 # #6: Feature: Round-trip separator support from OMD (using a separator designator) to BMM (JSON defined) separator
 
-**State:** OPEN
+**State:** CLOSED
 **Author:** vyzed
 **Created:** 2026-04-19T23:28:34Z
+**Closed:** 2026-04-25T05:37:14Z
 
 ---
 
