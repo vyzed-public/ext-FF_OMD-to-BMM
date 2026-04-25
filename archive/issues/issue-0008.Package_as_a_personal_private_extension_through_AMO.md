@@ -1,4 +1,4 @@
-# #8: Package: as a permanent Private Extension through AMO
+# #8: Package: as a personal private extension through AMO
 
 **State:** CLOSED
 **Author:** vyzed
