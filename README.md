@@ -41,18 +41,33 @@ _"I... had some code... in `/tmp`"_ — Baroness Blixen
 cd ~/my/files/local/lfs.00-Scratch/builds/from.repos/on.github/vyzed-public/ext-FF_OMD-to-BMM
 ```
 
-More handy (& commonly used) git tidbits (_"gitbits"?_) for the _"git-syntax/arcana-challenged"_:
-```
-# Synch da local stuffz
-git pull && git status
-git pull --rebase  # WTF do I always forget this one?
+---
 
-# Some frequent tag-flavored (as opposed to branch/merge) ops
-git tag -a v0.1.0-pre-ui-rework -m "Before popup UI rework: field reorder, label changes, Clip button"
-git push origin --tags
+#### More handy (& commonly used) git tidbits (_"gitbits"?_) for the _"git-syntax/arcana-challenged"_:
+Synch da local stuffz:
+* `git pull && git status`
+* `git pull --rebase  # WTF do I always forget this one?`
 
-git tag round-trip-features-complete && git push origin --tags
+A commonly repeating feature-branch round-trip:
+1. `git pull`
+2. `git checkout -b fb-implement_issue-0XYZ # Tie the branch to a documented GSD issue`
+3. `git add . # ...or W-dafuk I workded on.`
+4. `git commit -m "Implement issue #0XYZ: My anazing (and TESTED, right?) feature."
+5. `git checkout main`
+6. `git merge fb-implement_issue-0XYZ`
+7. `git branch -d fb-implement_issue-0008 # Unless you REALLY want to keep it?`
+8. `git status`
+9. `git push origin  # Unless you've been sloppy, and you need a...`
+10. `git pull --rebase`
+11. `git push origin  # ...because NOW you're all clean & tidy`
+12. `git pull && git status # I'm a GOOD boy!`
 
-git tag v0.3.0-flat-parse
-git push origin v0.3.0-flat-parser
-```
+Some frequent tag-flavored (as opposed to branch/merge) ops:
+* Mocha/Latte:
+  * `git tag -a v0.1.0-pre-ui-rework -m "Before popup UI rework: field reorder, label changes, Clip button"`
+  * `git push origin --tags`
+* Espresso:
+  * `git tag round-trip-features-complete && git push origin --tags`
+* Cappuccino:
+  * `git tag v0.3.0-flat-parse`
+  * `git push origin v0.3.0-flat-parser`
